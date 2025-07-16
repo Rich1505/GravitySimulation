@@ -5,7 +5,7 @@
 class Body
 {
 public:
-	const float density = 0.03f;
+	static constexpr float density = 0.03f;
 	Vector2 position;
 	Vector2 velocity;
 	Vector2 acceleration;
@@ -16,8 +16,9 @@ public:
 	void applyForce(Vector2 &force);
 	void draw();
 	float calculateRadius(float mass);
+	void changeRadius(float mass);
 
-	Body(Vector2& position, float mass, Color color)
+	Body(const Vector2& position, float mass, Color color)
 	{
 		this->position = position;
 		this->mass = mass;
@@ -28,7 +29,7 @@ public:
 		acceleration = { 0.0f,0.0f };
 	}
 
-	Body(Vector2& position, float mass, Color color, Vector2 &velocity)
+	Body(const Vector2& position, float mass, Color color, const Vector2 &velocity)
 	{
 		this->position = position;
 		this->mass = mass;
@@ -38,5 +39,6 @@ public:
 		this->velocity = velocity;
 		acceleration = { 0.0f,0.0f };
 	}
+
 };
 

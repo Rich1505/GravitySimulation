@@ -1,6 +1,6 @@
 #include "Physics.h"
 
-void Physics::update()
+void Physics::update(std::vector<Body> &bodies)
 {
 	for (size_t i = 0; i < bodies.size(); i++)
 	{
@@ -11,8 +11,21 @@ void Physics::update()
 
 			if (CheckCollisionCircles(bodies[i].position, bodies[i].radius, bodies[j].position, bodies[j].radius))
 			{
+				float totalMass = bodies[i].mass + bodies[j].mass;
 
+				if (bodies[i].mass >= bodies[j].mass)
+				{
+					bodies[i].changeRadius(totalMass);
+					bodies.erase(bodies.begin() + j);
+				}
+				else
+				{
+					bodies[j].changeRadius(totalMass);
+					bodies.erase(bodies.begin() + i);
+				}
+				return;
 			}
+
 			
 			Vector2 force = computeGravitationalForce(bodies[i], bodies[j]);
 			totalForce = Vector2Add(totalForce, force);
@@ -21,18 +34,9 @@ void Physics::update()
 		bodies[i].applyForce(totalForce);
 	}
 
-	draw();
 }
 
-void Physics::draw()
-{
-	for (int i = 0; i < bodies.size(); i++)
-	{
-		bodies[i].draw();
-	}
-}
-
-Vector2 Physics::computeGravitationalForce(Body& a, Body& b)
+Vector2 Physics::computeGravitationalForce(const Body& a, const Body& b)
 {
 	Vector2 direction = Vector2Subtract(b.position, a.position);
 	float distance = Vector2Length(direction);
@@ -44,12 +48,16 @@ Vector2 Physics::computeGravitationalForce(Body& a, Body& b)
 	return Vector2Scale(direction, forceMagnitude);
 }
 
-void Physics::addBody(Vector2& position, float mass, Color color)
+Vector2 Physics::computeCircularVelocity(const Body& satellite, const Body& center)
 {
-	bodies.push_back(Body{ position,mass,color });
-}
+	Vector2 direction = Vector2Subtract(satellite.position, center.position);
 
-void Physics::addBody(Vector2& position, float mass, Color color, Vector2 &velocity)
-{
-	bodies.push_back(Body{ position,mass,color,velocity});
+	float r = Vector2Length(direction);
+	float v = sqrtf(G * center.mass / r);
+
+	Vector2 orbitalVelocity = { -direction.y,direction.x };
+	orbitalVelocity = Vector2Normalize(orbitalVelocity);
+	orbitalVelocity = Vector2Scale(orbitalVelocity, v);
+
+	return orbitalVelocity;
 }
