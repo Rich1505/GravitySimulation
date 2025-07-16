@@ -9,6 +9,11 @@ void Physics::update()
 		{
 			if (i == j) continue;
 
+			if (CheckCollisionCircles(bodies[i].position, bodies[i].radius, bodies[j].position, bodies[j].radius))
+			{
+
+			}
+			
 			Vector2 force = computeGravitationalForce(bodies[i], bodies[j]);
 			totalForce = Vector2Add(totalForce, force);
 		}
@@ -39,12 +44,12 @@ Vector2 Physics::computeGravitationalForce(Body& a, Body& b)
 	return Vector2Scale(direction, forceMagnitude);
 }
 
-void Physics::addBody(Vector2& position, float mass, float radius, Color color)
+void Physics::addBody(Vector2& position, float mass, Color color)
 {
-	bodies.push_back(Body{ position,mass,radius,color });
+	bodies.push_back(Body{ position,mass,color });
 }
 
-void Physics::addBody(Vector2& position, float mass, float radius, Color color, Vector2 &velocity)
+void Physics::addBody(Vector2& position, float mass, Color color, Vector2 &velocity)
 {
-	bodies.push_back(Body{ position,mass,radius,color,velocity});
+	bodies.push_back(Body{ position,mass,color,velocity});
 }

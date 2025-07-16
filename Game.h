@@ -10,6 +10,7 @@ private:
 	const int screenHeight = 900;
 	Physics physics;
 
+
 public:
 	~Game()
 	{

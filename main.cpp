@@ -1,3 +1,10 @@
+/*
+Camera2D
+Input
+Pausa
+Modifica in game
+*/
+
 #include"Game.h"
 
 int main()
