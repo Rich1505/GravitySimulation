@@ -14,11 +14,12 @@ public:
 	Color color;
 
 	void applyForce(Vector2 &force);
+	void followMouse(Vector2 mousePos);
 	void draw();
 	float calculateRadius(float mass);
 	void changeRadius(float mass);
 
-	Body(const Vector2& position, float mass, Color color)
+	Body(const Vector2 position, float mass, Color color)
 	{
 		this->position = position;
 		this->mass = mass;
@@ -29,7 +30,7 @@ public:
 		acceleration = { 0.0f,0.0f };
 	}
 
-	Body(const Vector2& position, float mass, Color color, const Vector2 &velocity)
+	Body(const Vector2 position, float mass, Color color, const Vector2 velocity)
 	{
 		this->position = position;
 		this->mass = mass;

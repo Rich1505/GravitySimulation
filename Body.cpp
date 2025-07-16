@@ -12,6 +12,21 @@ void Body::applyForce(Vector2& force)
 	acceleration = { 0.0f,0.0f };
 }
 
+void Body::followMouse(Vector2 mousePos)
+{
+	Vector2 forceMouse = Vector2Subtract(mousePos, this->position);
+	forceMouse = Vector2Scale(forceMouse, 1000.0f);
+	this->velocity = { 0.0f,0.0f };
+	Vector2 forceAcc = Vector2Scale(forceMouse, 1.0f / 20.0f * 3.0f);
+	acceleration = Vector2Add(acceleration, forceAcc);
+
+	velocity = Vector2Add(velocity, Vector2Scale(acceleration, GetFrameTime()));
+
+	position = Vector2Add(position, Vector2Scale(velocity, GetFrameTime()));
+
+	acceleration = { 0.0f,0.0f };
+}
+
 void Body::draw()
 {
 	DrawCircleV(position, radius, color);

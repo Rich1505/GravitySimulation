@@ -3,6 +3,7 @@
 #include<iostream>
 #include"Physics.h"
 #include<vector>
+#include"UserInterface.h"
 
 class Game
 {
@@ -11,6 +12,10 @@ private:
 	const int screenHeight = 900;
 	Physics physics;
 	std::vector<Body> bodies;
+	Camera2D camera;
+	UserInterface UI;
+	bool gamePaused;
+	int frameCounter;
 
 public:
 	~Game()
@@ -22,6 +27,14 @@ public:
 	Game()
 	{
 		setup();
+		camera = { 0 };
+		camera.target = bodies[0].position;
+		camera.offset = Vector2{ GetScreenWidth() / 2.0f,GetScreenHeight() / 2.0f };
+		camera.rotation = 0.0f;
+		camera.zoom = 1.0f;
+		UI.setup();
+		gamePaused = false;
+		frameCounter = 0;
 	}
 
 
