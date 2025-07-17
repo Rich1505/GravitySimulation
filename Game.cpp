@@ -2,6 +2,7 @@
 
 void Game::setup()
 {
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Gravity Simulation");
 	SetTargetFPS(144);
 
@@ -15,18 +16,22 @@ void Game::setup()
 
 void Game::loop()
 {
-	setTrails();
+	checkWindow();
+	
 	frameCounter++;
 
 	if (!gamePaused)
 	{
-		physics.update(bodies);
+		physics.update(bodies, safeDelta);
+		setTrails();
 	}
 	
 
 	UI.checkInput(camera,gamePaused,bodies);
 
 	draw();
+
+	safeDelta = Clamp(GetFrameTime(), 0, 0.1f);
 
 }
 
@@ -90,7 +95,20 @@ void Game::drawTrails()
 {
 	for (size_t i = 0; i < bodies.size(); i++)
 	{
-		
 		DrawSplineLinear(bodies[i].trailOrdered, Body::trailSize,(1.0f/camera.zoom) ,bodies[i].color);
+	}
+}
+
+void Game::checkWindow()
+{
+	if (GetScreenHeight() != screenHeight)
+	{
+		screenHeight = GetScreenHeight();
+	}
+
+	if (GetScreenWidth() != screenWidth)
+	{
+		screenWidth = GetScreenWidth();
+		UI.setup();
 	}
 }

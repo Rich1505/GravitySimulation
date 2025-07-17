@@ -1,14 +1,14 @@
 #include "Body.h"
 #include<iostream>
 
-void Body::applyForce(Vector2 force)
+void Body::applyForce(Vector2 force, float delta)
 {
 	Vector2 forceAcc = Vector2Scale(force, 1.0f / mass);
 	acceleration = Vector2Add(acceleration, forceAcc);
 
-	velocity = Vector2Add(velocity, Vector2Scale(acceleration, GetFrameTime() * 10));
+	velocity = Vector2Add(velocity, Vector2Scale(acceleration, delta * 10));
 
-	position = Vector2Add(position, Vector2Scale(velocity, GetFrameTime() * 10));
+	position = Vector2Add(position, Vector2Scale(velocity, delta * 10));
 
 	acceleration = { 0.0f,0.0f };
 }

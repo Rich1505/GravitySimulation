@@ -8,19 +8,19 @@
 class Game
 {
 private:
-	const int screenWidth = 1600;
-	const int screenHeight = 900;
+	int screenWidth = 1600;
+	int screenHeight = 900;
 	Physics physics;
 	std::vector<Body> bodies;
 	Camera2D camera;
 	UserInterface UI;
 	bool gamePaused;
 	int frameCounter;
+	float safeDelta;
 
 public:
 	~Game()
 	{
-		std::cout << "Chiuso";
 		CloseWindow();
 	}
 
@@ -35,6 +35,7 @@ public:
 		UI.setup();
 		gamePaused = false;
 		frameCounter = 0;
+		safeDelta = 0.0f;
 	}
 
 
@@ -45,5 +46,6 @@ public:
 	void draw();
 	void setTrails();
 	void drawTrails();
+	void checkWindow();
 };
 

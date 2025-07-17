@@ -1,6 +1,6 @@
 #include "Physics.h"
 
-void Physics::update(std::vector<Body> &bodies)
+void Physics::update(std::vector<Body> &bodies, float delta)
 {
 	for (size_t i = 0; i < bodies.size(); i++)
 	{
@@ -31,7 +31,7 @@ void Physics::update(std::vector<Body> &bodies)
 			totalForce = Vector2Add(totalForce, force);
 		}
 
-		bodies[i].applyForce(totalForce);
+		bodies[i].applyForce(totalForce,delta);
 	}
 
 }

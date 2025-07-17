@@ -4,7 +4,7 @@
 
 void UserInterface::setup()
 {
-	startingX = GetScreenWidth() - 300;
+	startingX = GetScreenWidth() - 400;
 }
 
 void UserInterface::draw(bool gamePaused)
