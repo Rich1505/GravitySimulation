@@ -7,18 +7,18 @@ class Body
 {
 public:
 	static constexpr float density = 0.03f;
-	static constexpr int trailSize = 30;
+	static constexpr int trailSize = 144;
 	Vector2 position;
 	Vector2 velocity;
 	Vector2 acceleration;
 	float mass;
 	float radius;
 	Color color;
-	Vector2 trail[30];
-	Vector2 trailOrdered[30];
+	Vector2 trail[trailSize];
+	Vector2 trailOrdered[trailSize];
 
-	void applyForce(Vector2 &force);
-	void followMouse(Vector2 mousePos);
+	void applyForce(Vector2 force);
+	void followMouse(Vector2 mousePos, bool gamePaused);
 	void draw();
 	float calculateRadius(float mass);
 	void changeRadius(float mass);

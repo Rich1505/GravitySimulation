@@ -1,6 +1,7 @@
 #include "Body.h"
+#include<iostream>
 
-void Body::applyForce(Vector2& force)
+void Body::applyForce(Vector2 force)
 {
 	Vector2 forceAcc = Vector2Scale(force, 1.0f / mass);
 	acceleration = Vector2Add(acceleration, forceAcc);
@@ -12,7 +13,7 @@ void Body::applyForce(Vector2& force)
 	acceleration = { 0.0f,0.0f };
 }
 
-void Body::followMouse(Vector2 mousePos)
+void Body::followMouse(Vector2 mousePos, bool gamePaused)
 {
 	Vector2 forceMouse = Vector2Subtract(mousePos, this->position);
 	forceMouse = Vector2Scale(forceMouse, 1000.0f);
@@ -20,9 +21,8 @@ void Body::followMouse(Vector2 mousePos)
 	Vector2 forceAcc = Vector2Scale(forceMouse, 1.0f / 20.0f * 0.02f * (float)GetFPS());
 	acceleration = Vector2Add(acceleration, forceAcc);
 
-	velocity = Vector2Add(velocity, Vector2Scale(acceleration, GetFrameTime()));
-	Vector2 oldPosition = position;
-	position = Vector2Add(position, Vector2Scale(velocity, GetFrameTime()));
+	velocity = gamePaused ? Vector2Add(velocity, Vector2Scale(acceleration, GetFrameTime() * 3.0f)) : Vector2Add(velocity, Vector2Scale(acceleration, GetFrameTime()));
+	position = gamePaused ? Vector2Add(position, Vector2Scale(velocity, GetFrameTime() * 3.0f)) : position = Vector2Add(position, Vector2Scale(velocity, GetFrameTime()));
 	
 	acceleration = { 0.0f,0.0f };
 }

@@ -35,7 +35,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 
 			if (prev)
 			{
-				prev->followMouse(mousePos);
+				prev->followMouse(mousePos,gamePaused);
 			}
 			else
 			{
@@ -43,7 +43,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 				{
 					if (CheckCollisionPointCircle(mousePos, bodies[i].position, bodies[i].radius))
 					{
-						bodies[i].followMouse(mousePos);
+						bodies[i].followMouse(mousePos,gamePaused);
 						prev = &bodies[i];
 						break;
 					}
