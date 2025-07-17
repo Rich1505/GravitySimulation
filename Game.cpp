@@ -3,7 +3,7 @@
 void Game::setup()
 {
 	InitWindow(screenWidth, screenHeight, "Gravity Simulation");
-	SetTargetFPS(144);
+	SetTargetFPS(30);
 
 	Vector2 pos = { 800.0f,450.0f };
 	addBody(pos, 20000.0f, YELLOW);
@@ -15,6 +15,7 @@ void Game::setup()
 
 void Game::loop()
 {
+	setTrails();
 	frameCounter++;
 	if (!gamePaused)
 	{
@@ -49,7 +50,42 @@ void Game::draw()
 	{
 		bodies[i].draw();
 	}
+
+	drawTrails();
+
 	EndMode2D();
 
 	UI.draw(gamePaused);
+}
+
+float timeElapsed = 0.0f;
+int counterTrail = 0;
+void Game::setTrails()
+{
+	timeElapsed += GetFrameTime();
+	if (timeElapsed >= 0.05f)
+	{
+		int start = (counterTrail + 1) % 30;
+
+		for (size_t i = 0; i < bodies.size(); i++)
+		{
+			bodies[i].trail[counterTrail % 30] = bodies[i].position;
+
+			for (int j = 0; j < 30; j++)
+			{
+				bodies[i].trailOrdered[j] = bodies[i].trail[(start + j) % 30];
+			}
+		}
+		timeElapsed = 0.0f;
+		counterTrail++;
+	}
+}
+
+void Game::drawTrails()
+{
+	for (size_t i = 0; i < bodies.size(); i++)
+	{
+		
+		DrawSplineLinear(bodies[i].trailOrdered, 29,(1.0f/camera.zoom) ,bodies[i].color);
+	}
 }

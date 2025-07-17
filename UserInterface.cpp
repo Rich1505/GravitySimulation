@@ -27,7 +27,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 	else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
 		counterPressed++;
-		if (counterPressed >= (float)GetFPS()/20.0f)
+		if (counterPressed >= (float)GetFPS()/15.0f)
 		{
 			Vector2 mousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 			Vector2 mouseDelta = Vector2Subtract(mousePos, prevMousePos);

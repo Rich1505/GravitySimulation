@@ -43,5 +43,7 @@ public:
 	void addBody(Vector2& position, float mass, Color color);
 	void addBody(Vector2& position, float mass, Color color, Vector2& velocity);
 	void draw();
+	void setTrails();
+	void drawTrails();
 };
 
