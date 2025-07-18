@@ -1,21 +1,26 @@
 #include "Game.h"
+#include<iostream>
+#include<string>
 
 void Game::setup()
 {
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	//SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Gravity Simulation");
+	SetWindowMinSize(600, 450);
+
 	SetTargetFPS(144);
 
-	Vector2 pos = { 800.0f,450.0f };
+	Vector2 pos = { 0.0f,0.0f };
 	addBody(pos, 200000.0f, YELLOW);
 
-	pos = { 800.0f,200.0f };
+	pos = { 0.0f,-250.0f };
 	addBody(pos, 200.0f, WHITE);
 	bodies[1].velocity = physics.computeCircularVelocity(bodies[1], bodies[0]);
 }
 
 void Game::loop()
 {
+	updateCoordinates();
 	checkWindow();
 	
 	frameCounter++;
@@ -62,8 +67,10 @@ void Game::draw()
 	EndMode2D();
 
 	UI.draw(gamePaused);
-
+	
 	DrawFPS(0, 0);
+
+	DrawText(coordinates, 0, screenHeight-20, 20, WHITE);
 
 	EndDrawing();
 }
@@ -111,4 +118,19 @@ void Game::checkWindow()
 		screenWidth = GetScreenWidth();
 		UI.setup();
 	}
+}
+
+void Game::updateCoordinates()
+{
+	std::string x = std::to_string(int(camera.target.x));
+	std::string y = std::to_string(int(camera.target.y));
+
+	std::string final = x + "," + y;
+	
+	for (size_t i = 0; i < final.size() && i < coordinatesSize; i++)
+	{
+		coordinates[i] = final[i];
+	}
+
+	coordinates[final.size()] = '\0';
 }

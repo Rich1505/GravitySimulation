@@ -1,10 +1,11 @@
 #include "UserInterface.h"
 #include<raymath.h>
 #include"Physics.h"
+#include<iostream>
 
 void UserInterface::setup()
 {
-	startingX = GetScreenWidth() - 400;
+	startingX = GetScreenWidth() - 300;
 }
 
 void UserInterface::draw(bool gamePaused)
@@ -27,7 +28,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 	else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
 		counterPressed++;
-		if (counterPressed >= (float)GetFPS()/15.0f)
+		if (counterPressed >= (float)GetFPS()/10.0f)
 		{
 			Vector2 mousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 			Vector2 mouseDelta = Vector2Subtract(mousePos, prevMousePos);
@@ -77,7 +78,8 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		float prevZoom = camera.zoom;
 
 		camera.zoom += scrool * zoomSpeed;
-		camera.zoom = Clamp(camera.zoom, 0.1f, 5.0f);
+		camera.zoom = Clamp(camera.zoom, 0.08f, 4.0f);
+
 		Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
 		Vector2 offset = Vector2Subtract(mouseWorldPos, camera.target);
 		camera.target = Vector2Add(camera.target, Vector2Scale(offset, (1.0f - prevZoom / camera.zoom)));

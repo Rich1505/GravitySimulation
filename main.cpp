@@ -3,6 +3,8 @@ Camera2D
 Input
 Pausa
 Modifica in game
+Griglia
+Coordinate
 */
 
 #include"Game.h"

@@ -18,6 +18,9 @@ private:
 	int frameCounter;
 	float safeDelta;
 
+	static constexpr int coordinatesSize = 100;
+	char coordinates[coordinatesSize];
+
 public:
 	~Game()
 	{
@@ -27,15 +30,16 @@ public:
 	Game()
 	{
 		setup();
+		UI.setup();
 		camera = { 0 };
-		camera.target = bodies[0].position;
-		camera.offset = Vector2{ GetScreenWidth() / 2.0f,GetScreenHeight() / 2.0f };
+		camera.target = Vector2{ 0.0f,0.0f };
+		camera.offset = Vector2{ GetScreenWidth() / 2.0f - (GetScreenWidth() - UI.startingX)/2.0f,GetScreenHeight() / 2.0f };
 		camera.rotation = 0.0f;
 		camera.zoom = 1.0f;
-		UI.setup();
 		gamePaused = false;
 		frameCounter = 0;
 		safeDelta = 0.0f;
+		
 	}
 
 
@@ -47,5 +51,6 @@ public:
 	void setTrails();
 	void drawTrails();
 	void checkWindow();
+	void updateCoordinates();
 };
 
