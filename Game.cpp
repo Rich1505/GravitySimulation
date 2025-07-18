@@ -27,7 +27,9 @@ void Game::loop()
 
 	if (!gamePaused)
 	{
-		physics.update(bodies, safeDelta);
+		for(size_t i = 0;i<gameSpeed;i++)
+			physics.update(bodies, safeDelta);
+
 		setTrails();
 	}
 	

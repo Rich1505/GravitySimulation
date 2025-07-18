@@ -8,7 +8,6 @@ class UserInterface
 private:
 	Color color;
 	Vector2 prevMousePos;
-	Body* prev;
 
 public:
 	int startingX;
@@ -21,7 +20,6 @@ public:
 		startingX = 0;
 		color = Color{ 100,100,100,200};
 		prevMousePos = { 0.0f,0.0f };
-		prev = nullptr;
 	}
 };
 

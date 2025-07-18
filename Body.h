@@ -6,6 +6,7 @@
 class Body
 {
 public:
+	static Body* selected;
 	static constexpr float density = 0.03f;
 	static constexpr int trailSize = 100;
 	Vector2 position;

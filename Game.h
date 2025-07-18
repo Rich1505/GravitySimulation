@@ -17,7 +17,7 @@ private:
 	bool gamePaused;
 	int frameCounter;
 	float safeDelta;
-
+	int gameSpeed;
 	static constexpr int coordinatesSize = 100;
 	char coordinates[coordinatesSize];
 
@@ -39,7 +39,7 @@ public:
 		gamePaused = false;
 		frameCounter = 0;
 		safeDelta = 0.0f;
-		
+		gameSpeed = 10;
 	}
 
 
