@@ -19,7 +19,7 @@ public:
 	Vector2 trailOrdered[trailSize];
 
 	void applyForce(Vector2 force, float delta);
-	void followMouse(Vector2 mousePos, bool gamePaused);
+	void followMouse(Vector2 mousePos);
 	void draw();
 	float calculateRadius(float mass);
 	void changeRadius(float mass);

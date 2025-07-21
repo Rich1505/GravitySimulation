@@ -12,6 +12,7 @@ void Physics::update(std::vector<Body> &bodies, float delta)
 			if (CheckCollisionCircles(bodies[i].position, bodies[i].radius, bodies[j].position, bodies[j].radius))
 			{
 				float totalMass = bodies[i].mass + bodies[j].mass;
+				Body::selected = nullptr;
 
 				if (bodies[i].mass >= bodies[j].mass)
 				{

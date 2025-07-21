@@ -4,7 +4,7 @@
 
 void Game::setup()
 {
-	//SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Gravity Simulation");
 	SetWindowMinSize(600, 450);
 
@@ -18,6 +18,7 @@ void Game::setup()
 	bodies[1].velocity = physics.computeCircularVelocity(bodies[1], bodies[0]);
 }
 
+//frame logic
 void Game::loop()
 {
 	updateCoordinates();
@@ -34,10 +35,11 @@ void Game::loop()
 	}
 	
 
-	UI.checkInput(camera,gamePaused,bodies);
+	UI.checkInput(camera,gamePaused,bodies,gameSpeed);
 
 	draw();
 
+	//maximum delta = 0.1f
 	safeDelta = Clamp(GetFrameTime(), 0, 0.1f);
 
 }
@@ -68,17 +70,20 @@ void Game::draw()
 
 	EndMode2D();
 
-	UI.draw(gamePaused);
+	UI.draw(gamePaused,coordinates,gameSpeed,defaultGameSpeed);
 	
 	DrawFPS(0, 0);
-
-	DrawText(coordinates, 0, screenHeight-20, 20, WHITE);
 
 	EndDrawing();
 }
 
+//to update trails based on the time
 float timeElapsed = 0.0f;
+
+//actual starting point from the trail vector
 int counterTrail = 0;
+
+//update the bodies' trails
 void Game::setTrails()
 {
 	timeElapsed += GetFrameTime();
@@ -100,6 +105,7 @@ void Game::setTrails()
 	}
 }
 
+//draw the bodies' trails
 void Game::drawTrails()
 {
 	for (size_t i = 0; i < bodies.size(); i++)
@@ -108,6 +114,7 @@ void Game::drawTrails()
 	}
 }
 
+//update the screen variables if they've changed
 void Game::checkWindow()
 {
 	if (GetScreenHeight() != screenHeight)
@@ -122,6 +129,7 @@ void Game::checkWindow()
 	}
 }
 
+//update the displayed coordinates
 void Game::updateCoordinates()
 {
 	std::string x = std::to_string(int(camera.target.x));

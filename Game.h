@@ -1,6 +1,5 @@
 #pragma once
 #include<raylib.h>
-#include<iostream>
 #include"Physics.h"
 #include<vector>
 #include"UserInterface.h"
@@ -16,8 +15,16 @@ private:
 	UserInterface UI;
 	bool gamePaused;
 	int frameCounter;
+	static constexpr int defaultGameSpeed = 10;
+
+	//delta used to not destroy the simulation(ex. while dragging window)
 	float safeDelta;
+
+	//how many times the physics is updated in a frame
 	int gameSpeed;
+
+	//coordinates to be displayed
+
 	static constexpr int coordinatesSize = 100;
 	char coordinates[coordinatesSize];
 
@@ -39,7 +46,7 @@ public:
 		gamePaused = false;
 		frameCounter = 0;
 		safeDelta = 0.0f;
-		gameSpeed = 10;
+		gameSpeed = defaultGameSpeed;
 	}
 
 
