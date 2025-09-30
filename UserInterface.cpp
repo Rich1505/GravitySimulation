@@ -11,12 +11,37 @@ void UserInterface::setup()
 	texts[0] = UIText{ "SPACE TO PAUSE",10 };
 	texts[1] = UIText{ "MOUSE WHEEL TO ZOOM",70 };
 	texts[2] = UIText{ "ARROWS TO CHANGE SPEED",130 };
+
+	buttons[0] = Button{ WHITE };
+	buttons[1] = Button{ YELLOW };
+	buttons[2] = Button{ GREEN };
+	buttons[3] = Button{ BLUE };
+	buttons[4] = Button{ PURPLE };
+	buttons[5] = Button{ BROWN };
+
+	buttonSetup();
+}
+
+void UserInterface::buttonSetup()
+{
+	int totalSpaceWidth = Button::spaceX + Button::width * 2;
+	int x = (UI_WIDTH - totalSpaceWidth) / 2;
+
+	for (size_t i = 0; i < 3; i++)
+	{
+			buttons[i * 2].rec.x = UserInterface::startingX + x;
+			buttons[i * 2 + 1].rec.x = UserInterface::startingX + x + Button::width + Button::spaceX;
+			buttons[i * 2].rec.y = Button::startingY + i * Button::spaceY + i * Button::height;
+			buttons[i * 2 + 1].rec.y = Button::startingY + i * Button::spaceY + i * Button::height;
+			//std::cout << buttons[i * j].rec.x << " " << buttons[i * j].rec.y << " " << i << " " << j << std::endl << buttons[i * j + 1].rec.x << " " << buttons[i * j + 1].rec.y << std::endl;
+	}
 }
 
 void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int defaultGameSpeed)
 {
 	DrawRectangle(startingX, 0, GetScreenWidth() - startingX, GetScreenHeight(), color);
 	drawText();
+	drawButtons();
 	drawGameSpeed(gameSpeed,defaultGameSpeed);
 
 	if (gamePaused)
@@ -25,6 +50,14 @@ void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int de
 	}
 
 	DrawText(coordinates, 0, GetScreenHeight() - 20, 20, WHITE);
+}
+
+void UserInterface::drawButtons()
+{
+	for (size_t i = 0; i < 6; i++)
+	{
+		buttons[i].draw(offsetY);
+	}
 }
 
 void UserInterface::drawGameSpeed(int gameSpeed, int defaultGameSpeed)
@@ -41,7 +74,7 @@ void UserInterface::drawText()
 {
 	for (size_t i = 0; i < 3; i++)
 	{
-		DrawText(texts[i].text.c_str(), texts[i].x, texts[i].y, texts[i].fontSize, WHITE);
+		texts[i].draw(offsetY);
 	}
 }
 
@@ -102,18 +135,35 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		camera.target = Vector2Add(camera.target, delta);
 	}
 
-	float scrool = GetMouseWheelMove();
-	if (scrool != 0)
+	float scroll = GetMouseWheelMove();
+	if (scroll != 0)
 	{
-		float zoomSpeed = 0.1f;
-		float prevZoom = camera.zoom;
+		if (CheckCollisionPointRec(GetMousePosition(), Rectangle{ (float)startingX,0,UI_WIDTH,(float)GetScreenHeight() }))
+		{
+			int scrollSpeed = 50;
+			offsetY += scrollSpeed * scroll;
+			if (offsetY > 0)
+				offsetY = 0;
 
-		camera.zoom += scrool * zoomSpeed;
-		camera.zoom = Clamp(camera.zoom, 0.08f, 4.0f);
+			int advancingPixel = defaultHeight - GetScreenHeight();
+			if (offsetY <= -advancingPixel)
+			{
+				offsetY = -advancingPixel;
+			}
+		}
+		else
+		{
+			float zoomSpeed = 0.1f;
+			float prevZoom = camera.zoom;
 
-		Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
-		Vector2 offset = Vector2Subtract(mouseWorldPos, camera.target);
-		camera.target = Vector2Add(camera.target, Vector2Scale(offset, (1.0f - prevZoom / camera.zoom)));
+			camera.zoom += scroll * zoomSpeed;
+			camera.zoom = Clamp(camera.zoom, 0.08f, 4.0f);
+
+			Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
+			Vector2 offset = Vector2Subtract(mouseWorldPos, camera.target);
+			camera.target = Vector2Add(camera.target, Vector2Scale(offset, (1.0f - prevZoom / camera.zoom)));
+		}
+		
 	}
 
 	if (IsKeyPressed(KEY_UP))

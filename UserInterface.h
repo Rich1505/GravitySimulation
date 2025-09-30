@@ -7,6 +7,36 @@
 
 constexpr int UI_WIDTH = 400;
 
+struct Button {
+	Rectangle rec;
+	Color color;
+	
+	static constexpr int width = 100;
+	static constexpr int height = 100;
+	static constexpr int spaceX = 50;
+	static constexpr int spaceY = 50;
+	static constexpr int startingY = 200;
+
+	Button(Color color)
+	{
+		rec.width = width;
+		rec.height = height;
+		this->color = Color{color.r,color.g,color.b,200};
+	}
+
+	Button()
+	{
+		rec = Rectangle{ 0,0,0,0 };
+		color = Color{ 0,0,0 };
+	}
+
+	void draw(int offsetY)
+	{
+		DrawRectangle(rec.x,rec.y + offsetY,rec.width,rec.height, Color{ 0,0,0,100 });
+		DrawCircle(rec.x + rec.width / 2, rec.y + rec.height / 2 + offsetY, rec.width/2 - 5, color);
+	}
+};
+
 struct UIText {
 	static constexpr int fontSize = 20;
 
@@ -30,24 +60,33 @@ struct UIText {
 		x = 0;
 		y = 0;
 	}
+
+	void draw(int offsetY)
+	{
+		DrawText(text.c_str(), x, y + offsetY, fontSize, WHITE);
+	}
 };
 
 class UserInterface
 {
 private:
 	Color color;
-	int offsetY;
 	//mouse position in the previous frame translated in world coordinates
 	Vector2 prevMousePos;
 	UIText texts[3];
+	Button buttons[6];
 
 public:
+	static constexpr int defaultHeight = 900;
 	int startingX;
+	int offsetY;
 	static constexpr int width = UI_WIDTH;
 	void draw(bool gamePaused,char* coordinates,int gameSpeed,int defaultGameSpeed);
 	void drawText();
+	void drawButtons();
 	void drawGameSpeed(int gameSpeed, int defaultGameSpeed);
 	void setup();
+	void buttonSetup();
 	void checkInput(Camera2D &camera, bool &gamePaused, std::vector<Body> &bodies, int &gameSpeed);
 
 	UserInterface()

@@ -7,6 +7,7 @@ void Game::setup()
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Gravity Simulation");
 	SetWindowMinSize(600, 450);
+	SetWindowMaxSize(10000, 900);
 
 	SetTargetFPS(144);
 
@@ -87,7 +88,7 @@ int counterTrail = 0;
 void Game::setTrails()
 {
 	timeElapsed += GetFrameTime();
-	if (timeElapsed >= 0.05f)
+	if (timeElapsed >= 0.02f)
 	{
 		int start = (counterTrail + 1) % Body::trailSize;
 
@@ -120,6 +121,14 @@ void Game::checkWindow()
 	if (GetScreenHeight() != screenHeight)
 	{
 		screenHeight = GetScreenHeight();
+		if (UI.offsetY > 0)
+			UI.offsetY = 0;
+
+		int advancingPixel = UserInterface::defaultHeight - GetScreenHeight();
+		if (UI.offsetY <= -advancingPixel)
+		{
+			UI.offsetY = -advancingPixel;
+		}
 	}
 
 	if (GetScreenWidth() != screenWidth)
