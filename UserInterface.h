@@ -36,7 +36,7 @@ struct Button {
 		temp.y = temp.y + offsetY;
 		//DrawRectangle(rec.x,rec.y + offsetY,rec.width,rec.height, Color{ 0,0,0,100 });
 		DrawRectangleRounded(temp, 0.2f, 0, Color{ 0,0,0,100 });
-		DrawCircle(rec.x + rec.width / 2, rec.y + rec.height / 2 + offsetY, rec.width/2 - 5, color);
+		DrawCircle((int)(rec.x + rec.width / 2), (int)(rec.y + rec.height / 2 + offsetY), rec.width / 2 - 5, color);
 	}
 };
 

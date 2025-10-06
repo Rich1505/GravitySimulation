@@ -29,10 +29,10 @@ void UserInterface::buttonSetup()
 
 	for (size_t i = 0; i < 3; i++)
 	{
-			buttons[i * 2].rec.x = UserInterface::startingX + x;
-			buttons[i * 2 + 1].rec.x = UserInterface::startingX + x + Button::width + Button::spaceX;
-			buttons[i * 2].rec.y = Button::startingY + i * Button::spaceY + i * Button::height;
-			buttons[i * 2 + 1].rec.y = Button::startingY + i * Button::spaceY + i * Button::height;
+			buttons[i * 2].rec.x = (float)(UserInterface::startingX + x);
+			buttons[i * 2 + 1].rec.x = (float)(UserInterface::startingX + x + Button::width + Button::spaceX);
+			buttons[i * 2].rec.y = (float)(Button::startingY + i * Button::spaceY + i * Button::height);
+			buttons[i * 2 + 1].rec.y = (float)(Button::startingY + i * Button::spaceY + i * Button::height);
 			//std::cout << buttons[i * j].rec.x << " " << buttons[i * j].rec.y << " " << i << " " << j << std::endl << buttons[i * j + 1].rec.x << " " << buttons[i * j + 1].rec.y << std::endl;
 	}
 }
@@ -141,7 +141,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		if (CheckCollisionPointRec(GetMousePosition(), Rectangle{ (float)startingX,0,UI_WIDTH,(float)GetScreenHeight() }))
 		{
 			int scrollSpeed = 50;
-			offsetY += scrollSpeed * scroll;
+			offsetY += (int)(scrollSpeed * scroll);
 			if (offsetY > 0)
 				offsetY = 0;
 
@@ -175,7 +175,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		gameSpeed -= 2;
 	}
 
-	gameSpeed = Clamp(gameSpeed, 2.0f, 50.0f);
+	gameSpeed = (int)Clamp((float)gameSpeed, 2.0f, 50.0f);
 
 	prevMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 }
