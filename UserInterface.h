@@ -18,17 +18,10 @@ struct Button {
 	static constexpr int startingY = 200;
 
 	Button(Color color)
-	{
-		rec.width = width;
-		rec.height = height;
-		this->color = Color{color.r,color.g,color.b,200};
-	}
+		:rec{0, 0, width, height}, color{color.r, color.g, color.b, 200} {}
 
-	Button()
-	{
-		rec = Rectangle{ 0,0,0,0 };
-		color = Color{ 0,0,0 };
-	}
+	Button() 
+		:rec{ 0,0,0,0 }, color{ 0,0,0 } {}
 
 	void draw(int offsetY)
 	{
@@ -48,21 +41,11 @@ struct UIText {
 	int x;
 	int y;
 
-	UIText(const char text[], int y)
-	{
-		this->text = text;
-		width = MeasureText(text, fontSize);
-		x = (GetScreenWidth() - UI_WIDTH) + (UI_WIDTH-width)/2;
-		this->y = y;
-	}
+	UIText(const char text[], int y) 
+		:text(text), width(MeasureText(text, fontSize)), x((GetScreenWidth() - UI_WIDTH) + (UI_WIDTH - width) / 2), y(y){}
 
-	UIText()
-	{
-		text = "";
-		width = 0;
-		x = 0;
-		y = 0;
-	}
+	UIText() 
+		:text(""), width(0), x(0), y(0){}
 
 	void draw(int offsetY)
 	{
