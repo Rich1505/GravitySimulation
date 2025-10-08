@@ -78,7 +78,7 @@ void UserInterface::drawText()
 	}
 }
 
-int counterPressed = 0;
+int counterPressedLeftMouseButton = 0;
 void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<Body> &bodies, int &gameSpeed)
 {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
@@ -87,10 +87,10 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 	}
 	else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
-		counterPressed++;
+		counterPressedLeftMouseButton++;
 
 		//only if pressed for enough time
-		if (counterPressed >= (float)GetFPS()/10.0f)
+		if (counterPressedLeftMouseButton >= (float)GetFPS()/10.0f)
 		{
 			Vector2 mousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 			Vector2 mouseDelta = Vector2Subtract(mousePos, prevMousePos);
@@ -118,7 +118,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 	}
 	else
 	{
-		counterPressed = 0;
+		counterPressedLeftMouseButton = 0;
 		Body::selected = nullptr;
 	}
 	
