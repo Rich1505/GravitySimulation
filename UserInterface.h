@@ -31,6 +31,13 @@ struct Button {
 		DrawRectangleRounded(temp, 0.2f, 60, Color{ 0,0,0,100 });
 		DrawCircle((int)(rec.x + rec.width / 2), (int)(rec.y + rec.height / 2 + offsetY), rec.width/2.0f - 5.0f, color);
 	}
+
+	void drawSelected(int offsetY)
+	{
+		Rectangle temp = rec;
+		temp.y = temp.y + offsetY;
+		DrawRectangleRoundedLines(temp, 0.2f, 60, WHITE);
+	}
 };
 
 struct UIText {
@@ -63,6 +70,8 @@ private:
 	Button buttons[6];
 
 public:
+	int selectedButton;
+	static constexpr int numberOfButtons = 6;
 	static constexpr int defaultHeight = 900;
 	int startingX;
 	int offsetY;
@@ -77,6 +86,7 @@ public:
 
 	UserInterface()
 	{
+		selectedButton = -1;
 		startingX = 0;
 		color = Color{ 100,100,100,200};
 		prevMousePos = { 0.0f,0.0f };

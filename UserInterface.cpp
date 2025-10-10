@@ -5,6 +5,9 @@
 #include<sstream>
 #include<iomanip>
 
+//prototype
+bool checkCollisionMouseButton(Button button, Vector2 mousePos);
+
 void UserInterface::setup()
 {
 	startingX = GetScreenWidth() - width;
@@ -57,6 +60,9 @@ void UserInterface::drawButtons()
 	for (size_t i = 0; i < 6; i++)
 	{
 		buttons[i].draw(offsetY);
+
+		if (i == selectedButton)
+			buttons[i].drawSelected(offsetY);
 	}
 }
 
@@ -81,9 +87,35 @@ void UserInterface::drawText()
 int counterPressedLeftMouseButton = 0;
 void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<Body> &bodies, int &gameSpeed)
 {
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
 	{
+		//check if the left mouse button was pressed for a short time
+		//interaction with the buttons
+		if (counterPressedLeftMouseButton < (GetFPS() * 20.0f)/144)
+		{
+			Vector2 mousePos = GetMousePosition();
+			for (size_t i = 0; i < numberOfButtons; i++)
+			{
+				if (checkCollisionMouseButton(buttons[i], mousePos))
+				{
+					selectedButton = (int)i;
+					//std::cout << "Selected button: " << selectedButton << std::endl;
+					return;
+				}
+			}
 
+			if(selectedButton == -1)
+				return;
+
+			//check if the mouse is not over the UI and add body
+			Rectangle UserInterfaceRect = Rectangle{ (float)startingX, 0, (float)(GetScreenWidth() - startingX), (float)GetScreenHeight() };
+			if (!CheckCollisionPointRec(mousePos, UserInterfaceRect))
+			{
+				Color color = buttons[selectedButton].color;
+				color.a = 255;
+				bodies.push_back(Body{ GetScreenToWorld2D(mousePos,camera),100.0f,color });
+			}
+		}
 	}
 	else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 	{
@@ -178,4 +210,9 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 	gameSpeed = (int)Clamp((float)gameSpeed, 2.0f, 50.0f);
 
 	prevMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+}
+
+bool checkCollisionMouseButton(Button button, Vector2 mousePos)
+{
+	return CheckCollisionPointRec(mousePos, button.rec);
 }
