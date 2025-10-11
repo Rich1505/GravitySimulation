@@ -1,11 +1,69 @@
 #pragma once
-#include<raylib.h>
 #include<vector>
 #include"Body.h"
 #include<string>
 #include<iostream>
+#include<raygui.h>
 
 constexpr int UI_WIDTH = 400;
+
+struct Slider {
+	Rectangle range;
+	Rectangle selector;
+	int maxValue;
+	int minValue;
+	int value;
+	int width = 800;
+
+	Slider(Rectangle range, Rectangle selector,int maxValue, int minValue)
+		:range(range), selector(selector), maxValue(maxValue), minValue(minValue)
+	{
+		value = Remap(range.x + range.width / 2, range.x, range.x + range.width, minValue, maxValue);
+		this->selector.y = selector.y - (selector.height - range.height) / 2;
+	}
+
+	Slider(int width)
+		:range{ 0,0,0,0 }, selector{ 0,0,0,0 }, maxValue(0), minValue(0), value(0),width(width) {}
+
+	Slider()
+		:range{ 0,0,0,0 }, selector{ 0,0,0,0 }, maxValue(0), minValue(0), value(0), width(0) {}
+
+	bool checkCollision(Vector2 mousePos)
+	{
+		return CheckCollisionPointRec(mousePos, selector);
+	}
+
+	void changePosition(Vector2 mousePos)
+	{
+		if (mousePos.x < range.x + range.width && mousePos.x > range.x)
+		{
+			
+			selector.x = mousePos.x - selector.width/2;
+			value = Remap((float)selector.x+selector.width/2.0f, range.x, range.x + range.width, minValue, maxValue);
+			if (abs(selector.x + selector.width / 2 - range.x) <=2)
+			{
+				value = minValue;
+			}
+			else if(abs(selector.x + selector.width / 2 - (range.x + range.width)) <= 2)
+			{
+				value = maxValue;
+			}
+
+			std::cout << "Mass: " << value << std::endl;
+			std::cout << selector.x + selector.width / 2;
+		}
+	}
+
+	void draw(int offsetY)
+	{
+		Rectangle temp = range;
+		temp.y = temp.y + offsetY;
+		DrawRectangleRec(temp, Color{ 0,0,0,100 });
+		temp = selector;
+		temp.y = temp.y + offsetY;
+		DrawRectangleRec(temp, Color{ 200,200,200,200 });
+	}
+};
 
 struct Button {
 	Rectangle rec;
@@ -68,6 +126,7 @@ private:
 	Vector2 prevMousePos;
 	UIText texts[3];
 	Button buttons[6];
+	Slider massSelector{ 300 };
 
 public:
 	int selectedButton;
@@ -93,4 +152,3 @@ public:
 		offsetY = 0;
 	}
 };
-

@@ -22,6 +22,9 @@ void UserInterface::setup()
 	buttons[4] = Button{ PURPLE };
 	buttons[5] = Button{ BROWN };
 
+	float massSelectorStartingX = startingX + (width - massSelector.width)/2.0f;
+	massSelector = Slider{ Rectangle{massSelectorStartingX,700,(float)massSelector.width,50}, Rectangle{massSelectorStartingX + massSelector.width / 2,700,(float)30,60},100000000,200 };
+
 	buttonSetup();
 }
 
@@ -45,6 +48,7 @@ void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int de
 	DrawRectangle(startingX, 0, GetScreenWidth() - startingX, GetScreenHeight(), color);
 	drawText();
 	drawButtons();
+	massSelector.draw(offsetY);
 	drawGameSpeed(gameSpeed,defaultGameSpeed);
 
 	if (gamePaused)
@@ -53,6 +57,9 @@ void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int de
 	}
 
 	DrawText(coordinates, 0, GetScreenHeight() - 20, 20, WHITE);
+
+	
+	//GuiTextBox(Rectangle{ 500,500,100,100 }, a, 20, true);
 }
 
 void UserInterface::drawButtons()
@@ -113,7 +120,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 			{
 				Color color = buttons[selectedButton].color;
 				color.a = 255;
-				bodies.push_back(Body{ GetScreenToWorld2D(mousePos,camera),100.0f,color });
+				bodies.push_back(Body{ GetScreenToWorld2D(mousePos,camera),(float)massSelector.value,color });
 			}
 		}
 	}
@@ -121,31 +128,41 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 	{
 		counterPressedLeftMouseButton++;
 
-		//only if pressed for enough time
-		if (counterPressedLeftMouseButton >= (float)GetFPS()/10.0f)
+		Vector2 mousePos = GetMousePosition();
+		Rectangle UserInterfaceRect = Rectangle{ (float)startingX, 0, (float)(GetScreenWidth() - startingX), (float)GetScreenHeight() };
+		if (!CheckCollisionPointRec(mousePos, UserInterfaceRect))
 		{
-			Vector2 mousePos = GetScreenToWorld2D(GetMousePosition(), camera);
-			Vector2 mouseDelta = Vector2Subtract(mousePos, prevMousePos);
-
-
-			if (Body::selected)
+			//only if pressed for enough time
+			if (counterPressedLeftMouseButton >= (float)GetFPS() / 10.0f)
 			{
-				Body::selected->followMouse(mousePos);
-			}
-			else
-			{
+				Vector2 mousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+				Vector2 mouseDelta = Vector2Subtract(mousePos, prevMousePos);
 
-				//check for a collision between the mouse and a body
-				for (size_t i = 0; i < bodies.size(); i++)
+
+				if (Body::selected)
 				{
-					if (CheckCollisionPointCircle(mousePos, bodies[i].position, bodies[i].radius))
+					Body::selected->followMouse(mousePos);
+				}
+				else
+				{
+
+					//check for a collision between the mouse and a body
+					for (size_t i = 0; i < bodies.size(); i++)
 					{
-						Body::selected = &bodies[i];
-						bodies[i].followMouse(mousePos);
-						break;
+						if (CheckCollisionPointCircle(mousePos, bodies[i].position, bodies[i].radius))
+						{
+							Body::selected = &bodies[i];
+							bodies[i].followMouse(mousePos);
+							break;
+						}
 					}
 				}
 			}
+		}
+		else
+		{
+			if(massSelector.checkCollision(mousePos))
+				massSelector.changePosition(mousePos);
 		}
 	}
 	else
@@ -189,7 +206,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 			float prevZoom = camera.zoom;
 
 			camera.zoom += scroll * zoomSpeed;
-			camera.zoom = Clamp(camera.zoom, 0.08f, 4.0f);
+			camera.zoom = Clamp(camera.zoom, 0.05f, 4.0f);
 
 			Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
 			Vector2 offset = Vector2Subtract(mouseWorldPos, camera.target);

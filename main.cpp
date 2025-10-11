@@ -6,7 +6,7 @@ Modifica in game
 Griglia
 Coordinate
 */
-
+#define RAYGUI_IMPLEMENTATION
 #include"Game.h"
 
 int main()

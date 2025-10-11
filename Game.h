@@ -1,5 +1,4 @@
 #pragma once
-#include<raylib.h>
 #include"Physics.h"
 #include<vector>
 #include"UserInterface.h"
@@ -42,7 +41,7 @@ public:
 		camera.target = Vector2{ 0.0f,0.0f };
 		camera.offset = Vector2{ GetScreenWidth() / 2.0f - (GetScreenWidth() - UI.startingX)/2.0f,GetScreenHeight() / 2.0f };
 		camera.rotation = 0.0f;
-		camera.zoom = 1.0f;
+		camera.zoom = 0.5f;
 		gamePaused = false;
 		frameCounter = 0;
 		safeDelta = 0.0f;

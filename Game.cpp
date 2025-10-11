@@ -12,10 +12,10 @@ void Game::setup()
 	SetTargetFPS(144);
 
 	Vector2 pos = { 0.0f,0.0f };
-	addBody(pos, 200000.0f, YELLOW);
+	addBody(pos, 800000.0f, YELLOW);
 
-	pos = { 0.0f,-250.0f };
-	addBody(pos, 200.0f, WHITE);
+	pos = { 0.0f,-700.0f };
+	addBody(pos, 5000.0f, WHITE);
 	bodies[1].velocity = physics.computeCircularVelocity(bodies[1], bodies[0]);
 }
 
