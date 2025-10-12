@@ -22,10 +22,17 @@ void UserInterface::setup()
 	buttons[4] = Button{ PURPLE };
 	buttons[5] = Button{ BROWN };
 
-	float massSelectorStartingX = startingX + (width - massSelector.width)/2.0f;
-	massSelector = Slider{ Rectangle{massSelectorStartingX,700,(float)massSelector.width,50}, Rectangle{massSelectorStartingX + massSelector.width / 2,700,(float)30,60},100000000,200 };
+	//float massSelectorStartingX = startingX + (width - massSelector.width)/2.0f;
+	//massSelector = Slider{ Rectangle{massSelectorStartingX,700,(float)massSelector.width,50}, Rectangle{massSelectorStartingX + massSelector.width / 2,700,(float)30,60},100000000,200 };
 
 	buttonSetup();
+	massSelectorSetup();
+}
+
+void UserInterface::massSelectorSetup()
+{
+	float massSelectorStartingX = startingX + (width - massSelector.width) / 2.0f;
+	massSelector.rec = Rectangle{ massSelectorStartingX,700,(float)massSelector.width,50 };
 }
 
 void UserInterface::buttonSetup()
@@ -43,6 +50,8 @@ void UserInterface::buttonSetup()
 	}
 }
 
+//char a[10] = "";
+//int b;
 void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int defaultGameSpeed)
 {
 	DrawRectangle(startingX, 0, GetScreenWidth() - startingX, GetScreenHeight(), color);
@@ -59,7 +68,7 @@ void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int de
 	DrawText(coordinates, 0, GetScreenHeight() - 20, 20, WHITE);
 
 	
-	//GuiTextBox(Rectangle{ 500,500,100,100 }, a, 20, true);
+	//GuiValueBox(Rectangle{ 500,500,100,30 }, a, &b,0,100, true);
 }
 
 void UserInterface::drawButtons()
@@ -75,7 +84,7 @@ void UserInterface::drawButtons()
 
 void UserInterface::drawGameSpeed(int gameSpeed, int defaultGameSpeed)
 {
-	float value = (float)gameSpeed / (float)defaultGameSpeed;
+	float value = (float)gameSpeed / defaultGameSpeed;
 	std::ostringstream oss;
 	oss << std::fixed << std::setprecision(2) << value;
 	std::string str = oss.str();
@@ -94,6 +103,7 @@ void UserInterface::drawText()
 int counterPressedLeftMouseButton = 0;
 void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<Body> &bodies, int &gameSpeed)
 {
+	massSelector.update();
 	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
 	{
 		//check if the left mouse button was pressed for a short time
@@ -161,8 +171,8 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		}
 		else
 		{
-			if(massSelector.checkCollision(mousePos))
-				massSelector.changePosition(mousePos);
+			/*if(massSelector.checkCollision(mousePos))
+				massSelector.changePosition(mousePos);*/
 		}
 	}
 	else
@@ -202,11 +212,11 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		}
 		else
 		{
-			float zoomSpeed = 0.1f;
+			float zoomSpeed = 0.05f;
 			float prevZoom = camera.zoom;
 
 			camera.zoom += scroll * zoomSpeed;
-			camera.zoom = Clamp(camera.zoom, 0.05f, 4.0f);
+			camera.zoom = Clamp(camera.zoom, 0.03f, 4.0f);
 
 			Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
 			Vector2 offset = Vector2Subtract(mouseWorldPos, camera.target);

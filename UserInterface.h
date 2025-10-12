@@ -7,6 +7,39 @@
 
 constexpr int UI_WIDTH = 400;
 
+struct MassSelector {
+	
+	static constexpr int minValue = 200;
+	static constexpr int maxValue = 1000000000;
+	static constexpr int width = 300;
+	Rectangle rec;
+	char text[10];
+	char prevText[10];
+	int value;
+
+	MassSelector()
+		:rec{ 0,0,0,0}, value(200), text("200"),prevText("200") { }
+
+	void draw(int offsetY)
+	{
+		Rectangle temp = rec;
+		temp.y = temp.y + offsetY;
+		GuiValueBox(temp, text, &value, minValue, maxValue, true);
+	}
+
+	void update()
+	{
+		printf("%s\n", prevText);
+		if (value < 0)
+		{
+			strcpy(text, prevText);
+			value = 
+			//il pointer text è il laber
+		}
+		strcpy(prevText, text);
+	}
+};
+
 struct Slider {
 	Rectangle range;
 	Rectangle selector;
@@ -18,7 +51,7 @@ struct Slider {
 	Slider(Rectangle range, Rectangle selector,int maxValue, int minValue)
 		:range(range), selector(selector), maxValue(maxValue), minValue(minValue)
 	{
-		value = Remap(range.x + range.width / 2, range.x, range.x + range.width, minValue, maxValue);
+		value = (int)Remap((float)range.x + range.width / 2, (float)range.x, (float)range.x + range.width, (float)minValue, (float)maxValue);
 		this->selector.y = selector.y - (selector.height - range.height) / 2;
 	}
 
@@ -39,7 +72,7 @@ struct Slider {
 		{
 			
 			selector.x = mousePos.x - selector.width/2;
-			value = Remap((float)selector.x+selector.width/2.0f, range.x, range.x + range.width, minValue, maxValue);
+			value = (int)Remap((float)selector.x+selector.width/2.0f, (float)range.x, (float)range.x + range.width, (float)minValue, (float)maxValue);
 			if (abs(selector.x + selector.width / 2 - range.x) <=2)
 			{
 				value = minValue;
@@ -86,7 +119,7 @@ struct Button {
 		Rectangle temp = rec;
 		temp.y = temp.y + offsetY;
 		//DrawRectangle(rec.x,rec.y + offsetY,rec.width,rec.height, Color{ 0,0,0,100 });
-		DrawRectangleRounded(temp, 0.2f, 60, Color{ 0,0,0,100 });
+		DrawRectangleRounded(temp, 0.2f, 10, Color{ 0,0,0,100 });
 		DrawCircle((int)(rec.x + rec.width / 2), (int)(rec.y + rec.height / 2 + offsetY), rec.width/2.0f - 5.0f, color);
 	}
 
@@ -126,7 +159,8 @@ private:
 	Vector2 prevMousePos;
 	UIText texts[3];
 	Button buttons[6];
-	Slider massSelector{ 300 };
+	MassSelector massSelector;
+	//Slider massSelector{ 300 };
 
 public:
 	int selectedButton;
@@ -142,6 +176,7 @@ public:
 	void setup();
 	void buttonSetup();
 	void checkInput(Camera2D &camera, bool &gamePaused, std::vector<Body> &bodies, int &gameSpeed);
+	void massSelectorSetup();
 
 	UserInterface()
 	{

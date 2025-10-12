@@ -1,10 +1,12 @@
 #include "Game.h"
 #include<iostream>
 #include<string>
+#include<climits>
 
 void Game::setup()
 {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(screenWidth, screenHeight, "Gravity Simulation");
 	SetWindowMinSize(600, 450);
 	SetWindowMaxSize(10000, 900);
