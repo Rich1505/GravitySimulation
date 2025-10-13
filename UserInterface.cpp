@@ -44,12 +44,9 @@ void UserInterface::buttonSetup()
 			buttons[i * 2 + 1].rec.x = (float)(UserInterface::startingX + x + Button::width + Button::spaceX);
 			buttons[i * 2].rec.y = (float)(Button::startingY + i * Button::spaceY + i * Button::height);
 			buttons[i * 2 + 1].rec.y = (float)(Button::startingY + i * Button::spaceY + i * Button::height);
-			//std::cout << buttons[i * j].rec.x << " " << buttons[i * j].rec.y << " " << i << " " << j << std::endl << buttons[i * j + 1].rec.x << " " << buttons[i * j + 1].rec.y << std::endl;
 	}
 }
 
-//char a[10] = "";
-//int b;
 void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int defaultGameSpeed)
 {
 	DrawRectangle(startingX, 0, GetScreenWidth() - startingX, GetScreenHeight(), color);
@@ -110,7 +107,6 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 				if (checkCollisionMouseButton(buttons[i], mousePos))
 				{
 					selectedButton = (int)i;
-					//std::cout << "Selected button: " << selectedButton << std::endl;
 					return;
 				}
 			}
@@ -118,13 +114,16 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 			if(selectedButton == -1)
 				return;
 
-			//check if the mouse is not over the UI and add body
-			Rectangle UserInterfaceRect = Rectangle{ (float)startingX, 0, (float)(GetScreenWidth() - startingX), (float)GetScreenHeight() };
-			if (!CheckCollisionPointRec(mousePos, UserInterfaceRect))
+			//check if the mouse is not over the UI and mass is > 0 and add body
+			if (massSelector.value > 0)
 			{
-				Color color = buttons[selectedButton].color;
-				color.a = 255;
-				bodies.push_back(Body{ GetScreenToWorld2D(mousePos,camera),(float)massSelector.value,color });
+				Rectangle UserInterfaceRect = Rectangle{ (float)startingX, 0, (float)(GetScreenWidth() - startingX), (float)GetScreenHeight() };
+				if (!CheckCollisionPointRec(mousePos, UserInterfaceRect))
+				{
+					Color color = buttons[selectedButton].color;
+					color.a = 255;
+					bodies.push_back(Body{ GetScreenToWorld2D(mousePos,camera),(float)massSelector.value,color });
+				}
 			}
 		}
 	}
@@ -162,11 +161,6 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 					}
 				}
 			}
-		}
-		else
-		{
-			/*if(massSelector.checkCollision(mousePos))
-				massSelector.changePosition(mousePos);*/
 		}
 	}
 	else
@@ -206,7 +200,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		}
 		else
 		{
-			float zoomSpeed = 0.05f;
+			float zoomSpeed = 0.02f;
 			float prevZoom = camera.zoom;
 
 			camera.zoom += scroll * zoomSpeed;

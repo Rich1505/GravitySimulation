@@ -39,7 +39,7 @@ struct MassSelector {
 
 			int i = strlen(number);
 
-			if (i >= 10)
+			if (i >= 9)
 			{
 				value = prevValue;
 				return;
@@ -127,7 +127,6 @@ struct Button {
 	{
 		Rectangle temp = rec;
 		temp.y = temp.y + offsetY;
-		//DrawRectangle(rec.x,rec.y + offsetY,rec.width,rec.height, Color{ 0,0,0,100 });
 		DrawRectangleRounded(temp, 0.2f, 10, Color{ 0,0,0,100 });
 		DrawCircle((int)(rec.x + rec.width / 2), (int)(rec.y + rec.height / 2 + offsetY), rec.width/2.0f - 5.0f, color);
 	}
