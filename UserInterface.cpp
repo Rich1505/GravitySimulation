@@ -14,6 +14,7 @@ void UserInterface::setup()
 	texts[0] = UIText{ "SPACE TO PAUSE",10 };
 	texts[1] = UIText{ "MOUSE WHEEL TO ZOOM",70 };
 	texts[2] = UIText{ "ARROWS TO CHANGE SPEED",130 };
+	texts[3] = UIText{ "SELECT MASS", 650 };
 
 	buttons[0] = Button{ WHITE };
 	buttons[1] = Button{ YELLOW };
@@ -22,9 +23,6 @@ void UserInterface::setup()
 	buttons[4] = Button{ PURPLE };
 	buttons[5] = Button{ BROWN };
 
-	//float massSelectorStartingX = startingX + (width - massSelector.width)/2.0f;
-	//massSelector = Slider{ Rectangle{massSelectorStartingX,700,(float)massSelector.width,50}, Rectangle{massSelectorStartingX + massSelector.width / 2,700,(float)30,60},100000000,200 };
-
 	buttonSetup();
 	massSelectorSetup();
 }
@@ -32,7 +30,7 @@ void UserInterface::setup()
 void UserInterface::massSelectorSetup()
 {
 	float massSelectorStartingX = startingX + (width - massSelector.width) / 2.0f;
-	massSelector.rec = Rectangle{ massSelectorStartingX,700,(float)massSelector.width,50 };
+	massSelector.rec = Rectangle{ massSelectorStartingX,680,(float)massSelector.width,50 };
 }
 
 void UserInterface::buttonSetup()
@@ -66,9 +64,6 @@ void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int de
 	}
 
 	DrawText(coordinates, 0, GetScreenHeight() - 20, 20, WHITE);
-
-	
-	//GuiValueBox(Rectangle{ 500,500,100,30 }, a, &b,0,100, true);
 }
 
 void UserInterface::drawButtons()
@@ -94,7 +89,7 @@ void UserInterface::drawGameSpeed(int gameSpeed, int defaultGameSpeed)
 
 void UserInterface::drawText()
 {
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < 4; i++)
 	{
 		texts[i].draw(offsetY);
 	}
@@ -103,7 +98,6 @@ void UserInterface::drawText()
 int counterPressedLeftMouseButton = 0;
 void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<Body> &bodies, int &gameSpeed)
 {
-	massSelector.update();
 	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
 	{
 		//check if the left mouse button was pressed for a short time

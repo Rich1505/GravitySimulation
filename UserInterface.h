@@ -14,29 +14,38 @@ struct MassSelector {
 	static constexpr int width = 300;
 	Rectangle rec;
 	char text[10];
-	char prevText[10];
+	int prevValue;
 	int value;
 
 	MassSelector()
-		:rec{ 0,0,0,0}, value(200), text("200"),prevText("200") { }
+		:rec{ 0,0,0,0}, value(200),prevValue(200), text("") { }
 
 	void draw(int offsetY)
 	{
 		Rectangle temp = rec;
 		temp.y = temp.y + offsetY;
 		GuiValueBox(temp, text, &value, minValue, maxValue, true);
+		update();
 	}
 
 	void update()
 	{
-		printf("%s\n", prevText);
-		if (value < 0)
+		int k = GetKeyPressed();
+
+		if (k != KEY_BACKSPACE && k != 0)
 		{
-			strcpy(text, prevText);
-			value = 
-			//il pointer text è il laber
+			char number[11];
+			strcpy(number,_itoa(value, number, 10));
+
+			int i = strlen(number);
+
+			if (i >= 10)
+			{
+				value = prevValue;
+				return;
+			}
 		}
-		strcpy(prevText, text);
+		prevValue = value;
 	}
 };
 
@@ -157,10 +166,9 @@ private:
 	Color color;
 	//mouse position in the previous frame translated in world coordinates
 	Vector2 prevMousePos;
-	UIText texts[3];
+	UIText texts[4];
 	Button buttons[6];
 	MassSelector massSelector;
-	//Slider massSelector{ 300 };
 
 public:
 	int selectedButton;
