@@ -62,8 +62,8 @@ void UserInterface::draw(bool gamePaused, char* coordinates,int gameSpeed,int de
 
 	DrawText(coordinates, 0, GetScreenHeight() - 20, 20, WHITE);
 
-	DrawLine((GetScreenWidth() - UI_WIDTH) / 2.0f, GetScreenHeight()/2.0f - 2, (GetScreenWidth() - UI_WIDTH) / 2.0f, GetScreenHeight()/2.0f + 2, GREEN);
-	DrawLine((GetScreenWidth() - UI_WIDTH) / 2.0f - 2, GetScreenHeight() / 2.0f, (GetScreenWidth() - UI_WIDTH) / 2.0f + 2, GetScreenHeight() / 2.0f, GREEN);
+	DrawLine((GetScreenWidth() - UI_WIDTH) / 2, GetScreenHeight()/2 - 2, (GetScreenWidth() - UI_WIDTH) / 2, GetScreenHeight()/2 + 2, GREEN);
+	DrawLine((GetScreenWidth() - UI_WIDTH) / 2 - 2, GetScreenHeight() / 2, (GetScreenWidth() - UI_WIDTH) / 2 + 2, GetScreenHeight() / 2, GREEN);
 }
 
 void UserInterface::drawButtons()
@@ -225,7 +225,7 @@ void UserInterface::checkInput(Camera2D &camera, bool &gamePaused, std::vector<B
 		gameSpeed -= 2;
 	}
 
-	gameSpeed = (int)Clamp((float)gameSpeed, 2.0f, 50.0f);
+	gameSpeed = (int)Clamp((float)gameSpeed, 2.0f, 150.0f);
 
 	prevMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 }

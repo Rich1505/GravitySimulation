@@ -44,7 +44,7 @@ struct MassSelector {
 			char number[11];
 			strcpy(number,_itoa(value, number, 10));
 
-			int i = strlen(number);
+			int i = (int)strlen(number);
 
 			if (i >= 9)
 			{
