@@ -16,9 +16,10 @@ struct MassSelector {
 	char text[10];
 	int prevValue;
 	int value;
+	int prevKeyPressed;
 
 	MassSelector()
-		:rec{ 0,0,0,0}, value(200),prevValue(200), text("") { }
+		:rec{ 0,0,0,0}, value(200),prevValue(200), text(""),prevKeyPressed(0) { }
 
 	void draw(int offsetY)
 	{
@@ -31,6 +32,12 @@ struct MassSelector {
 	void update()
 	{
 		int k = GetKeyPressed();
+		if (k == prevKeyPressed)
+		{
+			value = prevValue;
+			return;
+		}
+		prevKeyPressed = k;
 
 		if (k != KEY_BACKSPACE && k != 0)
 		{
